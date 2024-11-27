@@ -1,7 +1,6 @@
 // import { useState } from 'react'
 import './App.css'
-import { FormComponent } from './components/FormComponent/FormComponent'
-
+import { FormMain } from './components/FormMain/FormMain'
 
 
 function App() {
@@ -10,7 +9,7 @@ function App() {
     <>
       <div>
        Registration form
-       <FormComponent />
+       <FormMain />
       </div>
       
     </>
