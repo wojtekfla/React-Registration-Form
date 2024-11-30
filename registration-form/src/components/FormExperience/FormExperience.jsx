@@ -1,6 +1,13 @@
 import { useFieldArray } from "react-hook-form";
 
-export function FormExperience({ control, register, setValue, errors, isExperience }) {
+export function FormExperience({
+	control,
+	register,
+	setValue,
+	errors,
+	data,
+	hasExperience,
+}) {
 	const skills = ["JavaScript", "Python", "Java", "other"];
 	const level = [1, 2, 3, 4, 5];
 
@@ -9,10 +16,6 @@ export function FormExperience({ control, register, setValue, errors, isExperien
 		name: "experience",
 	});
 
-	// const initialValues = { skills: "JavaScript", level: "1", id: 1 };
-
-	console.log('in form experience')
-	console.dir(errors)
 	return (
 		<div>
 			<button
@@ -23,12 +26,11 @@ export function FormExperience({ control, register, setValue, errors, isExperien
 						skills: "JavaScript",
 						level: "1",
 					});
+					// {}
 				}}>
 				Dodaj doświadczenie
 			</button>
-			{errors.experience && (
-				<p className="">Podaj technologie jesli zaznaczyles doswiadczenie</p>
-			)}
+			{errors.experience && <p className="">{errors.experience.message}</p>}
 
 			{fields.map((field, index) => {
 				setValue(`experience.${index}.id`, field.id);
@@ -54,15 +56,17 @@ export function FormExperience({ control, register, setValue, errors, isExperien
 								</option>
 							))}
 						</select>
-						<button className='' onClick={(e) => {
-							e.preventDefault()
-							remove(index)}
-							}>Usuń</button>
+						<button
+							className=""
+							onClick={(e) => {
+								e.preventDefault();
+								remove(index);
+							}}>
+							Usuń
+						</button>
 					</div>
 				);
 			})}
-
 		</div>
 	);
-
 }
