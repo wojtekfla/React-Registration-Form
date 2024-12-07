@@ -1,0 +1,89 @@
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 30px 5px;
+  width: 80%;
+}
+
+.form__header {
+  color: var(--color-main);
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 0.8rem;
+}
+
+.error {
+  color: var(--color-error);
+  margin: 5px 2px;
+  font-size: 0.9rem;
+}
+
+.input {
+  width: 80%;
+  padding: 5px;
+  border: solid 1px var(--color-main);
+  border-radius: 5px;
+  color: var(--color-main);
+}
+
+.input::placeholder {
+  color:darkgrey;
+  font-size: 0.8rem;
+}
+
+.studytype {
+  margin-top: 4px;
+  color: var(--color-main);
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.studytype__input {
+  min-width: 50%;
+  min-height: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.studytype__input > label {
+  font-size: 0.8rem;
+  margin-left: 5px;
+}
+
+.studytype__input > label > input {
+  margin: 5px;
+  scale: 1.5;
+}
+
+.technology {
+  color: var(--color-main);
+  min-width: 150px;
+  padding: 2px 5px;
+  overflow: hidden;
+}
+
+.fileInput {
+  color: var(--color-main);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+
+.experience {
+  color: var(--color-main);
+  font-size: 0.9rem;
+}
+
+.experienceInput {
+  color: var(--color-main);
+  margin-right: 5px;
+  padding: 5px;
+
+}
+
+
+

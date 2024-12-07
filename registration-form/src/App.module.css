@@ -1,0 +1,23 @@
+.container {
+  /* display: inline-block; */
+  outline: 1px solid black;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 50vw; 
+}
+
+.title {
+  color: white;
+  min-width: 800px;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  padding: 1rem;
+}
+
+
