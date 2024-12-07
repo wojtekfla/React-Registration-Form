@@ -1,0 +1,36 @@
+.container {
+  color: var(--color-main);
+  margin: 0 auto;
+  background-color: white;
+  padding: 10px 20px;
+  border-radius: 15px;
+  min-width: 220px;
+  width: 70%; 
+}
+
+.section {
+  min-width: 200px;
+  text-align: left;
+  font-size: 1rem;
+  padding: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.2rem;
+  text-decoration: underline;
+  padding-bottom: 5px;
+}
+
+.section > p {
+  font-size: 0.9rem;
+}
+
+.section > li {
+  font-size: 0.9rem;
+}
+
+.sectionImg {
+  padding-top: 15px;
+  max-height: 200px;
+  aspect-ratio: 0.7;
+}

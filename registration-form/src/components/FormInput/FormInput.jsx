@@ -1,4 +1,4 @@
-export function FormInput({ register, type, name, placeholder, error }) {
+export function FormInput({ register, type, name, placeholder, error, className, classError }) {
 	
   return (
 		<>
@@ -8,9 +8,10 @@ export function FormInput({ register, type, name, placeholder, error }) {
 				{...register(name)}
 				type={type}
 				placeholder={placeholder}
+				className={className}
 
 			/>
-			{error && <p className=''>{error.message}</p>}
+			{error && <p className={classError}>{error.message}</p>}
 		</>
 	);
 }

@@ -1,12 +1,12 @@
 import { useFieldArray } from "react-hook-form";
+import style from "./FormExperience.module.css"
 
 export function FormExperience({
 	control,
 	register,
 	setValue,
 	errors,
-	data,
-	hasExperience,
+	classError
 }) {
 	const skills = ["JavaScript", "Python", "Java", "other"];
 	const level = [1, 2, 3, 4, 5];
@@ -17,8 +17,8 @@ export function FormExperience({
 	});
 
 	return (
-		<div>
-			<button
+		<div className={style.exp}>
+			<button className={style.expButton}
 				type="button"
 				onClick={(e) => {
 					e.preventDefault();
@@ -26,28 +26,27 @@ export function FormExperience({
 						skills: "JavaScript",
 						level: "1",
 					});
-					// {}
 				}}>
 				Dodaj doświadczenie
 			</button>
-			{errors.experience && <p className="">{errors.experience.message}</p>}
+			{errors.experience && <p className={classError}>{errors.experience.message}</p>}
 
 			{fields.map((field, index) => {
 				setValue(`experience.${index}.id`, field.id);
 				return (
-					<div key={index}>
+					<div className={style.exp} key={index}>
 						<select
-							className=""
+							className={style.expSelect}
 							{...register(`experience.${index}.skills`)}
 							id={`skills-${index}`}>
 							{skills.map((item) => (
-								<option key={item} value={item}>
+								<option className={style.expSelect} key={item} value={item}>
 									{item}
 								</option>
 							))}
 						</select>
 						<select
-							className=""
+							className={style.expSelect}
 							{...register(`experience.${index}.level`)}
 							id={`level-${index}`}>
 							{level.map((item) => (
@@ -57,7 +56,7 @@ export function FormExperience({
 							))}
 						</select>
 						<button
-							className=""
+							className={style.expButtonDelete}
 							onClick={(e) => {
 								e.preventDefault();
 								remove(index);

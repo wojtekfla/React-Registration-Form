@@ -1,3 +1,4 @@
+import style from "./FormMain.module.css";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -6,6 +7,9 @@ import * as z from "zod";
 
 import { FormExperience } from "../FormExperience/FormExperience";
 import { FormInput } from "../FormInput/FormInput";
+import { FormButton } from "../FormButton/FormButton";
+
+const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/jpg"];
 
 const formSchema = z
 	.object({
@@ -22,7 +26,7 @@ const formSchema = z
 		phone: z
 			.string()
 			.min(9, { message: "Input a valid number, at least 9 digits" }),
-		studytype: z.enum(["stacjonarna", "online"], { message: "Wybierz jedną" }),
+		studytype: z.enum(["stacjonarna", "online"], { message: "Select at least one" }),
 		technology: z
 			.array(
 				z.enum(["react", "nodejs", "nextjs", "css", "asembler"], {
@@ -30,9 +34,13 @@ const formSchema = z
 				})
 			)
 			.nonempty({ message: "At least one must be selected" }),
-
+		fileInput: z
+			.instanceof(FileList)
+			.refine((fileList) => fileList.length === 1, { message: "Attach file" })
+			.refine((fileList) => ACCEPTED_FILE_TYPES.includes(fileList[0]?.type), {
+				message: "Unaccepted file format",
+			}),
 		hasExperience: z.boolean(),
-
 		experience: z
 			.array(
 				z.object({
@@ -42,7 +50,6 @@ const formSchema = z
 			)
 			.optional(),
 	})
-
 	.refine(
 		(data) => {
 			return (
@@ -52,12 +59,12 @@ const formSchema = z
 		},
 		{
 			message:
-				"Gdy zaznaczono doświadczenie w programowaniu, lista doświadczeń nie może być pusta.",
+				"When programming experience is selected, the experience list cannot be empty.",
 			path: ["experience"],
 		}
 	);
 
-export function FormMain() {
+export function FormMain({ setIsFormSubmitted, setFormData }) {
 	const {
 		register,
 		handleSubmit,
@@ -66,34 +73,28 @@ export function FormMain() {
 		setValue,
 	} = useForm({
 		resolver: zodResolver(formSchema),
-		defaultValues: {
-			// hasExperience: false,
-			// experience: []
-		},
 	});
 
 	const [experienceChecked, setExperienceChecked] = useState(false);
 
 	const onSubmit = (data) => {
-		console.log("data", data);
+		return new Promise((res) => {
+			setTimeout(() => {
+				res(true);
+				setFormData(data);
+				setIsFormSubmitted(true);
+			}, 5 * 1000);
+		});
 	};
 
 	const handleExperienceChecked = function () {
 		setExperienceChecked((prevState) => !prevState);
-		console.log("experienceChecked", experienceChecked);
-		// const hasExperience = experienceChecked
-		// console.log('has experience?', hasExperience)
 	};
-
-	if (errors) {
-		const errorsObj = errors;
-		console.log(errorsObj);
-	}
 
 	return (
 		<>
-			<form onSubmit={handleSubmit(onSubmit)} noValidate>
-				<h2>Dane osobowe</h2>
+			<form className={style.form} onSubmit={handleSubmit(onSubmit)}>
+				<h2 className={style.form__header}>Dane osobowe</h2>
 
 				<div>
 					<FormInput
@@ -102,9 +103,10 @@ export function FormMain() {
 						type="text"
 						placeholder="Imię"
 						error={errors.firstName}
+						className={style.input}
+						classError={style.error}
 					/>
 				</div>
-
 				<div>
 					<FormInput
 						name="lastName"
@@ -112,54 +114,67 @@ export function FormMain() {
 						type="text"
 						placeholder="Nazwisko"
 						error={errors.lastName}
+						className={style.input}
+						classError={style.error}
 					/>
 				</div>
-
 				<div>
 					<FormInput
 						name="email"
 						register={register}
 						type="text"
-						placeholder="email"
+						placeholder="E-mail"
 						error={errors.email}
+						className={style.input}
+						classError={style.error}
 					/>
 				</div>
-
 				<div>
 					<FormInput
 						name="phone"
 						register={register}
 						type="number"
-						placeholder=""
+						placeholder="Numer telefonu"
 						error={errors.phone}
+						className={style.input}
+						classError={style.error}
 					/>
 				</div>
 
-				<div>
+				<div className={style.studytype}>
 					<p className="studytype">Wybierz formę nauki</p>
 
-					<input
-						{...register("studytype")}
-						type="radio"
-						value="stacjonarna"
-						name="studytype"
-						id="fullTime"
-					/>
-					<label htmlFor="fullTime">Stacjonarna</label>
+					<div className={style.studytype__input}>
+						<label htmlFor="fullTime">
+							<input
+								{...register("studytype")}
+								type="radio"
+								value="stacjonarna"
+								name="studytype"
+								id="fullTime"
+							/>
+							Stacjonarna
+						</label>
 
-					<input
-						{...register("studytype")}
-						type="radio"
-						value="online"
-						name="studytype"
-						id="online"
-					/>
-					<label htmlFor="online">Online</label>
-					{errors.studytype && <p className="">{errors.studytype.message}</p>}
+						<label htmlFor="online">
+							<input
+								{...register("studytype")}
+								type="radio"
+								value="online"
+								name="studytype"
+								id="online"
+							/>
+							Online
+						</label>
+					</div>
 				</div>
+				{errors.studytype && (
+					<p className={style.error}>{errors.studytype.message}</p>
+				)}
 
 				<div>
 					<select
+						className={style.technology}
 						{...register("technology")}
 						name="technology"
 						id="technology"
@@ -171,24 +186,37 @@ export function FormMain() {
 						<option value="css">CSS</option>
 						<option value="asembler">Asembler ;)</option>
 					</select>
-					{errors.technology && <p className="">{errors.technology.message}</p>}
+					{errors.technology && (
+						<p className={style.error}>{errors.technology.message}</p>
+					)}
 				</div>
 
-				<div>
+				<div className={style.fileInput}>
 					<p>Dodaj swoje CV</p>
-					<input type="file" />
+					<label htmlFor="fileInput" className={style.fileInput}>
+						<input
+							{...register("fileInput")}
+							className={style.fileInput}
+							type="file"
+							id="fileInput"
+						/>
+					</label>
+					{errors.fileInput && (
+						<p className={style.error}>{errors.fileInput.message}</p>
+					)}
 				</div>
 
-				<div>
-					<input
-						{...register("hasExperience")}
-						type="checkbox"
-						id="hasExperience"
-						name="hasExperience"
-						onChange={handleExperienceChecked}
-					/>
+				<div className={style.experience}>
 					<label htmlFor="hasExperience">
-						Czy masz doświadczenie w programowaniu
+						<input
+							{...register("hasExperience")}
+							type="checkbox"
+							id="hasExperience"
+							name="hasExperience"
+							onChange={handleExperienceChecked}
+							className={style.experienceInput}
+						/>
+						Czy masz doświadczenie w programowaniu?
 					</label>
 				</div>
 
@@ -199,11 +227,14 @@ export function FormMain() {
 						setValue={setValue}
 						errors={errors}
 						hasExperience={experienceChecked}
+						classError={style.error}
 					/>
 				)}
-
-				<br />
-				<button type="submit">Wyślij</button>
+				{isSubmitting ? (
+					<button disabled>Wysyłanie</button>
+				) : (
+					<FormButton type="submit">Wyślij</FormButton>
+				)}
 			</form>
 		</>
 	);
